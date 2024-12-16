@@ -1,7 +1,7 @@
-// pages/RentPage.tsx
+"use client"
 import { useState } from 'react';
 
-const RentPage = () => {
+export default function RentPage () {
     const [showPopup, setShowPopup] = useState(false);
 
     const handleEndNowClick = () => {
@@ -79,5 +79,3 @@ const RentPage = () => {
         </div>
     );
 };
-
-export default RentPage;
