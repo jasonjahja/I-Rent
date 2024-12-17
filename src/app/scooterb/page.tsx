@@ -1,4 +1,5 @@
 import BackButton from "@/components/BackButtons";
+import Image from "next/image";
 
 export default function ScooterPage() {
   return (
@@ -15,10 +16,12 @@ export default function ScooterPage() {
       <div className="flex justify-between items-center px-6 mt-[60px]">
         {/* Scooter Image */}
         <div className="flex-1 flex justify-center">
-          <img
+          <Image
             src="/scooterb.png"
             alt="Scooter"
-            className="w-[250px] h-full object-contain"
+            width={250}
+            height={250}
+            className="h-full object-contain"
           />
         </div>
 

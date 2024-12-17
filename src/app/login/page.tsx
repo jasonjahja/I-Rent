@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function SignUp() {
     return (
         <div className="flex bg-red-500 min-h-screen overflow-hidden justify-center">
@@ -5,10 +7,12 @@ export default function SignUp() {
                 {/* Header */}
                 <div className=" text-white text-center py-12">
                     <div className="flex items-center justify-center">
-                        <img
+                        <Image
                             src="/Irent.png"
                             alt="Logo"
-                            className="items-center justify-center w-[170px] h-25"
+                            width={170}
+                            height={100}
+                            className="items-center justify-center"
                         />
                     </div>
                 </div>
