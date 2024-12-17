@@ -2,60 +2,66 @@
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function Login() {
   const [formData, setFormData] = useState({
-    identifier: "", // Accepts email or phone number
+    email: "",
     password: "",
   });
 
   const [errors, setErrors] = useState<{
-    identifier?: string;
+    email?: string;
     password?: string;
     general?: string;
   }>({});
-
+  const [loading, setLoading] = useState(false); // Loading state for UX feedback
   const router = useRouter();
 
   // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-
-    // Clear the field-specific error when user types
-    setErrors({ ...errors, [name]: undefined });
+    setErrors({ ...errors, [name]: undefined }); // Clear specific field error
   };
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({}); // Clear previous errors
+    setLoading(true); // Start loading state
+
+    // Validation for empty fields
+    if (!formData.email) {
+      setErrors((prev) => ({ ...prev, email: "Email/Phone Number is required." }));
+      setLoading(false);
+      return;
+    }
+    if (!formData.password) {
+      setErrors((prev) => ({ ...prev, password: "Password is required." }));
+      setLoading(false);
+      return;
+    }
 
     try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+      // Call NextAuth signIn
+      const result = await signIn("credentials", {
+        email: formData.email, // Pass correct "email" key
+        password: formData.password,
+        redirect: false, // Prevent redirect for manual error handling
       });
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        // Check if the API returned field-specific errors
-        if (result.errors) {
-          setErrors(result.errors);
-        } else {
-          throw new Error(result.error || "Invalid login credentials.");
-        }
-        return;
+      if (result?.error) {
+        setErrors({ general: "Invalid email/phone number or password." });
+      } else {
+        // On successful login, redirect to the home page
+        router.push("/maps");
       }
-
-      // Redirect to dashboard or home page on success
-      router.push("/dashboard");
-    } catch (err) {
-      setErrors({ general: (err as Error).message });
+    } catch (error) {
+      console.error("Login Error:", error);
+      setErrors({ general: "Something went wrong. Please try again later." });
+    } finally {
+      setLoading(false); // Stop loading state
     }
   };
 
@@ -87,36 +93,34 @@ export default function Login() {
           )}
 
           <form className="flex flex-col gap-6 font-poppins" onSubmit={handleSubmit}>
-            {/* Identifier Field */}
+            {/* Email Field */}
             <div>
               <label className="block text-xl font-medium text-gray-700">
-                Email/Phone Number
+                Email
               </label>
               <input
                 type="text"
-                name="identifier"
-                value={formData.identifier}
+                name="email"
+                value={formData.email}
                 onChange={handleChange}
-                placeholder="Your Email/Phone Number"
+                placeholder="johndoe@example.com"
                 className="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500"
                 required
               />
-              {errors.identifier && (
-                <p className="text-red-500 text-xs mt-1">{errors.identifier}</p>
+              {errors.email && (
+                <p className="text-red-500 text-xs mt-1">{errors.email}</p>
               )}
             </div>
 
             {/* Password Field */}
             <div>
-              <label className="block text-xl font-medium text-gray-700">
-                Password
-              </label>
+              <label className="block text-xl font-medium text-gray-700">Password</label>
               <input
                 type="password"
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                placeholder="Enter Password"
+                placeholder="************"
                 className="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500"
                 required
               />
@@ -128,9 +132,12 @@ export default function Login() {
             {/* Submit Button */}
             <button
               type="submit"
-              className="bg-red-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-red-600 transition duration-200 mt-4"
+              disabled={loading} // Disable button during loading
+              className={`bg-red-500 text-white font-semibold py-2 px-4 rounded-md transition duration-200 mt-4 ${
+                loading ? "opacity-50 cursor-not-allowed" : "hover:bg-red-600"
+              }`}
             >
-              Log In
+              {loading ? "Logging In..." : "Log In"}
             </button>
           </form>
 

@@ -9,7 +9,7 @@ export default function Home () {
                     Find the nearest scooter to you in just a few taps.
                 </h1>
                 <div>
-                    <Link href="/rent">
+                    <Link href="/login">
                         <button className="mt-4 w-fit px-4 py-2 bg-white text-[#F45E5E] font-bold rounded-lg text-lg">
                             Rent Now!
                         </button>

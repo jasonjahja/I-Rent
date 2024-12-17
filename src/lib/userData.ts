@@ -110,7 +110,7 @@ export async function getUsers() {
   try {
     return await prisma.user.findMany({
       select: {
-        user_id: true,
+        id: true,
         full_name: true,
         email: true,
         phone_number: true,

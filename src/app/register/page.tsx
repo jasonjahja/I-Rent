@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Register() {
@@ -18,6 +19,7 @@ export default function Register() {
     general?: string;
   }>({});
 
+  const router = useRouter();
   const [success, setSuccess] = useState<string | null>(null);
 
   // Handle input change
@@ -57,6 +59,7 @@ export default function Register() {
       }
 
       setSuccess("User registered successfully!");
+      router.push("/");
       setFormData({ full_name: "", email: "", phone_number: "", password: "" });
     } catch (err) {
       setErrors({ general: (err as Error).message });
@@ -105,7 +108,7 @@ export default function Register() {
                 name="full_name"
                 value={formData.full_name}
                 onChange={handleChange}
-                placeholder="Your Full Name"
+                placeholder="John Doe"
                 className="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500"
                 required
               />
@@ -123,7 +126,7 @@ export default function Register() {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="Your Email"
+                placeholder="@johndoe@example.com"
                 className="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500"
                 required
               />
@@ -141,7 +144,7 @@ export default function Register() {
                 name="phone_number"
                 value={formData.phone_number}
                 onChange={handleChange}
-                placeholder="Your Phone Number"
+                placeholder="+1234567890 (max 15 digits, no spaces)"
                 className="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500"
                 required
               />
@@ -159,7 +162,7 @@ export default function Register() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                placeholder="Enter Password"
+                placeholder="************"
                 className="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500"
                 required
               />
