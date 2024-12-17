@@ -1,6 +1,6 @@
 import BackButton from "@/components/BackButtons";
 
-export default function ScooterPage() {
+export default function ScooterPage2() {
   return (
     <div className="flex flex-col h-screen bg-gradient-to-b from-gray-100 to-white relative">
       {/* Header */}

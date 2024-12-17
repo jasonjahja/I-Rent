@@ -1,38 +1,42 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
-export default function Login() {
+export default function Register() {
   const [formData, setFormData] = useState({
-    identifier: "", // Accepts email or phone number
+    full_name: "",
+    email: "",
+    phone_number: "",
     password: "",
   });
 
   const [errors, setErrors] = useState<{
-    identifier?: string;
+    full_name?: string;
+    email?: string;
+    phone_number?: string;
     password?: string;
     general?: string;
   }>({});
 
-  const router = useRouter();
+  const [success, setSuccess] = useState<string | null>(null);
 
-  // Handle input changes
+  // Handle input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
-    // Clear the field-specific error when user types
+    // Clear field-specific error on change
     setErrors({ ...errors, [name]: undefined });
   };
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErrors({}); // Clear previous errors
+    setErrors({});
+    setSuccess(null);
 
     try {
-      const response = await fetch("/api/auth/login", {
+      const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -43,17 +47,17 @@ export default function Login() {
       const result = await response.json();
 
       if (!response.ok) {
-        // Check if the API returned field-specific errors
+        // Assign field-specific errors if returned from the backend
         if (result.errors) {
           setErrors(result.errors);
         } else {
-          throw new Error(result.error || "Invalid login credentials.");
+          throw new Error(result.error || "Failed to register user.");
         }
         return;
       }
 
-      // Redirect to dashboard or home page on success
-      router.push("/dashboard");
+      setSuccess("User registered successfully!");
+      setFormData({ full_name: "", email: "", phone_number: "", password: "" });
     } catch (err) {
       setErrors({ general: (err as Error).message });
     }
@@ -77,36 +81,75 @@ export default function Login() {
 
         {/* Form */}
         <div className="p-8 rounded-t-[38px] bg-white h-full">
-          <h2 className="text-3xl font-Poppins font-bold text-center mb-8 text-black mt-2">
-            Log In to Your <br /> Account
+          <h2 className="text-3xl font-Poppins font-bold text-center mb-8 text-black">
+            Create New <br /> Account
           </h2>
 
-          {/* General Error */}
           {errors.general && (
             <p className="text-red-500 text-sm text-center mb-4">{errors.general}</p>
           )}
+          {success && (
+            <p className="text-green-500 text-sm text-center mb-4">{success}</p>
+          )}
 
-          <form className="flex flex-col gap-6 font-poppins" onSubmit={handleSubmit}>
-            {/* Identifier Field */}
+          <form
+            className="flex flex-col gap-6 font-poppins"
+            onSubmit={handleSubmit}
+          >
             <div>
               <label className="block text-xl font-medium text-gray-700">
-                Email/Phone Number
+                Full Name
               </label>
               <input
                 type="text"
-                name="identifier"
-                value={formData.identifier}
+                name="full_name"
+                value={formData.full_name}
                 onChange={handleChange}
-                placeholder="Your Email/Phone Number"
+                placeholder="Your Full Name"
                 className="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500"
                 required
               />
-              {errors.identifier && (
-                <p className="text-red-500 text-xs mt-1">{errors.identifier}</p>
+              {errors.full_name && (
+                <p className="text-red-500 text-xs mt-1">{errors.full_name}</p>
               )}
             </div>
 
-            {/* Password Field */}
+            <div>
+              <label className="block text-xl font-medium text-gray-700">
+                Email
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Your Email"
+                className="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500"
+                required
+              />
+              {errors.email && (
+                <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-xl font-medium text-gray-700">
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                name="phone_number"
+                value={formData.phone_number}
+                onChange={handleChange}
+                placeholder="Your Phone Number"
+                className="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500"
+                required
+              />
+              {errors.phone_number && (
+                <p className="text-red-500 text-xs mt-1">{errors.phone_number}</p>
+              )}
+            </div>
+
             <div>
               <label className="block text-xl font-medium text-gray-700">
                 Password
@@ -125,19 +168,18 @@ export default function Login() {
               )}
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               className="bg-red-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-red-600 transition duration-200 mt-4"
             >
-              Log In
+              Sign Up
             </button>
           </form>
 
           <p className="mt-4 text-center text-sm text-gray-600">
-            Don&apos;t have an account?{" "}
-            <a href="/register" className="text-red-500 font-semibold hover:underline">
-              Sign Up
+            Already have an account?{" "}
+            <a href="/login" className="text-red-500 font-semibold hover:underline">
+              Log in
             </a>
           </p>
         </div>
