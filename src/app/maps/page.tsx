@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useRef } from "react";
-import ScooterCard from "../../app/components/ScooterCard";
+import ScooterCard from "../../components/ScooterCard";
+import BackButton from "../../components/BackButtons";
 import Image from "next/image";
 
 export default function MapsPage() {
@@ -44,13 +45,9 @@ export default function MapsPage() {
     <main className="w-[430px] h-[932px] mx-auto bg-gray-100 flex flex-col items-center overflow-hidden">
       {/* Top Bar */}
       <div className="absolute z-10 flex items-center w-full p-4">
-        <div className="bg-white rounded-full h-10 w-10 items-center text-center border-gray-300">
-          <button className="flex items-center gap-2 text-gray-800 px-4 py-2 rounded-md hover:text-gray-400 transition">
-            <i className="fas fa-angle-left"></i>
-          </button>
-        </div>
+        <BackButton />
 
-        <div className="p-2">
+        <div className="p-2 ml-12">
           <i
             className="fa fa-search relative left-10 text-gray-500"
             aria-hidden="true"
@@ -58,7 +55,7 @@ export default function MapsPage() {
           <input
             type="text"
             placeholder="Search location"
-            className="border border-gray-300 rounded-full p-3 pl-16 flex-1 focus:outline-none focus:ring-2 focus:grey-600"
+            className="border border-gray-300 rounded-full p-4 pl-16 flex-1 focus:outline-none focus:ring-2 focus:grey-600"
           />
         </div>
       </div>
