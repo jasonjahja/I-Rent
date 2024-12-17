@@ -1,3 +1,5 @@
+"use client"
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import React from "react";
 
@@ -7,6 +9,7 @@ interface VehicleCardProps {
   battery: number;
   range: number;
   vehicleType: string;
+  vehicleId: number;
 }
 
 const VehicleCard: React.FC<VehicleCardProps> = ({
@@ -14,10 +17,20 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
   distance,
   battery,
   range,
-  vehicleType
+  vehicleType,
+  vehicleId
 }) => {
+  
+  const router = useRouter();
+
+  // Navigate to the specific vehicle page
+  const handleCardClick = () => {
+    router.push(`/vehicle/${vehicleId}`);
+  };
+  
   return (
-    <div className="flex items-center justify-between px-8 py-4 bg-white rounded-lg shadow-md mb-4">
+    <div className="flex items-center justify-between px-8 py-4 bg-white rounded-lg shadow-md mb-4"
+    onClick={handleCardClick}>
       <div className="flex items-center gap-4">
         {/* Icon */}
         <Image

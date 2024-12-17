@@ -1,21 +1,28 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; // Import Next.js router
+import { useRouter, usePathname } from "next/navigation"; // Import hooks from Next.js
 
 export default function Navbar() {
-  const [active, setActive] = useState<string>("");
-  const router = useRouter(); // Initialize router instance
+  const router = useRouter();
+  const pathname = usePathname(); // Hook to get the current route
 
-  useEffect(() => {
-    // Set the initial state only on the client to avoid hydration mismatch
-    setActive("home");
-  }, []);
+  // Function to check active status based on pathname
+  const isActive = (page: string) => {
+    switch (page) {
+      case "home":
+        return pathname === "/";
+      case "map":
+        return pathname === "/maps";
+      case "profile":
+        return pathname === "/profile";
+      default:
+        return false;
+    }
+  };
 
   // Handle navigation
   const handleNavigation = (page: string) => {
-    setActive(page); // Update active state
     switch (page) {
       case "home":
         router.push("/"); // Redirect to home page
@@ -37,11 +44,11 @@ export default function Navbar() {
       <div
         onClick={() => handleNavigation("home")}
         className={`flex flex-col items-center cursor-pointer ${
-          active === "home" ? "text-red-500" : "text-gray-400"
+          isActive("home") ? "text-red-500" : "text-gray-400"
         }`}
       >
         <Image
-          src={active === "home" ? "/home-active.svg" : "/home.svg"}
+          src={isActive("home") ? "/home-active.svg" : "/home.svg"}
           alt="Home"
           width={32}
           height={32}
@@ -54,11 +61,11 @@ export default function Navbar() {
       <div
         onClick={() => handleNavigation("map")}
         className={`flex flex-col items-center cursor-pointer ${
-          active === "map" ? "text-red-500" : "text-gray-400"
+          isActive("map") ? "text-red-500" : "text-gray-400"
         }`}
       >
         <Image
-          src={active === "map" ? "/map-active.svg" : "/map.svg"}
+          src={isActive("map") ? "/map-active.svg" : "/map.svg"}
           alt="Map"
           width={32}
           height={32}
@@ -71,11 +78,11 @@ export default function Navbar() {
       <div
         onClick={() => handleNavigation("profile")}
         className={`flex flex-col items-center cursor-pointer ${
-          active === "profile" ? "text-red-500" : "text-gray-400"
+          isActive("profile") ? "text-red-500" : "text-gray-400"
         }`}
       >
         <Image
-          src={active === "profile" ? "/profile-active.svg" : "/profile.svg"}
+          src={isActive("profile") ? "/profile-active.svg" : "/profile.svg"}
           alt="Profile"
           width={32}
           height={32}

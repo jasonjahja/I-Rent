@@ -9,7 +9,7 @@ export default function ScooterPage() {
       <div className="relative flex items-center justify-center p-20">
         <BackButton />
         <h1 className="text-2xl font-extrabold text-gray-800 text-center items-center justify-center flex-1">
-          Scooter Type A
+          Scooter Type B
         </h1>
       </div>
 
@@ -18,7 +18,7 @@ export default function ScooterPage() {
         {/* Scooter Image */}
         <div className="flex-1 flex justify-center">
           <Image
-            src="/scootera.png"
+            src="/scooterb.png"
             alt="Scooter"
             width={250}
             height={250}
@@ -57,3 +57,4 @@ export default function ScooterPage() {
     </div>
   );
 }
+

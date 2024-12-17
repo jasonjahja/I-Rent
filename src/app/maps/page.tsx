@@ -141,6 +141,7 @@ export default function MapsPage() {
           vehicleData.map((vehicle) => (
             <VehicleCard
               key={vehicle.vehicle_id}
+              vehicleId={vehicle.vehicle_id}
               name={vehicle.vehicle_name}
               distance={vehicle.distance || 0}
               battery={vehicle.battery_level}
