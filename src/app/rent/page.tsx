@@ -1,8 +1,35 @@
-"use client"
-import { useState } from 'react';
+"use client";
+import { useState, useEffect } from "react";
 
-export default function RentPage () {
+export default function RentPage() {
     const [showPopup, setShowPopup] = useState(false);
+    const [time, setTime] = useState(0); // Time in seconds
+    const [isRunning, setIsRunning] = useState(true); // Control stopwatch
+    const [startDate, setStartDate] = useState(null); // State untuk menyimpan tanggal mulai
+
+    useEffect(() => {
+        // Set tanggal mulai saat komponen pertama kali mount
+        setStartDate(new Date());
+    }, []);
+
+    useEffect(() => {
+        let timer;
+        if (isRunning) {
+            timer = setInterval(() => {
+                setTime((prevTime) => prevTime + 1);
+            }, 1000);
+        }
+
+        return () => clearInterval(timer);
+    }, [isRunning]);
+
+    const formatTime = (time) => {
+        const minutes = Math.floor(time / 60)
+            .toString()
+            .padStart(2, "0");
+        const seconds = (time % 60).toString().padStart(2, "0");
+        return { minutes, seconds };
+    };
 
     const handleEndNowClick = () => {
         setShowPopup(true);
@@ -13,46 +40,69 @@ export default function RentPage () {
     };
 
     const handleConfirmEnd = () => {
-        // Lakukan aksi untuk mengakhiri penyewaan, misal redirect, API call, dll.
-        console.log("Rent ended");
+        setIsRunning(false);
+        console.log("Rent ended. Total time:", time);
         setShowPopup(false);
     };
 
+    // Format date menjadi hari dan tanggal, misalnya "Tuesday, Dec 17, 2024"
+    const formattedStartDate = startDate
+        ? startDate.toLocaleDateString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+        })
+        : "";
+
+    const { minutes, seconds } = formatTime(time);
+
     return (
-        <div className="min-h-screen bg-white relative flex flex-col items-center justify-center p-4 font-plus-jakarta-sans">
-            {/* Konten utama */}
-            <h1 className="text-3xl font-bold text-[#333] mb-8 text-center">
-                Your Rent Starts Now!
+        <div className="h-screen flex flex-col items-center justify-center p-4 font-plus-jakarta-sans relative bg-white">
+            {/* Heading */}
+            <h1 className="text-4xl font-bold text-[#333] mb-8 text-center leading-tight">
+                Your Rent<br />Starts Now!
             </h1>
-            <div className="flex items-center justify-center gap-2 mb-8">
-                <div className="w-16 h-16 flex items-center justify-center rounded-md bg-gradient-to-b from-[#F45E5E] to-[#F87575] text-white text-xl font-bold">
-                    22
+
+            {/* Timer */}
+            <div className="flex items-center justify-center gap-2 mb-6">
+                <div className="w-16 h-16 flex items-center justify-center rounded-md bg-gradient-to-b from-[#F45E5E] to-[#F87575] text-white text-3xl font-bold">
+                    {minutes}
                 </div>
-                <span className="text-2xl font-bold text-[#333]">:</span>
-                <div className="w-16 h-16 flex items-center justify-center rounded-md bg-gradient-to-b from-[#F45E5E] to-[#F87575] text-white text-xl font-bold">
-                    22
-                </div>
-            </div>
-            <div className="flex flex-col items-center gap-2 mb-8">
-                <div className="flex items-center gap-2">
-                    <div className="px-4 py-1 bg-[#F45E5E] bg-opacity-90 text-white text-sm rounded-md">
-                        Date
-                    </div>
-                    <div className="w-32 h-3 bg-[#F45E5E] bg-opacity-30 rounded-full"></div>
+                <span className="text-3xl font-bold text-[#333]">:</span>
+                <div className="w-16 h-16 flex items-center justify-center rounded-md bg-gradient-to-b from-[#F45E5E] to-[#F87575] text-white text-3xl font-bold">
+                    {seconds}
                 </div>
             </div>
-            <button
-                onClick={handleEndNowClick}
-                className="px-6 py-2 bg-[#F45E5E] hover:bg-[#F87575] text-white font-bold rounded-md"
-            >
-                End Now!
-            </button>
+
+            {/* Date Button and Input Field */}
+            <div className="flex items-center gap-2 mb-8">
+                <button className="px-4 py-2 bg-[#F45E5E] text-white rounded-md font-bold">
+                    Date
+                </button>
+                <input
+                    type="text"
+                    className="w-48 px-4 py-2 rounded-md border border-[#F45E5E] focus:outline-none focus:border-[#F87575]"
+                    value={formattedStartDate}
+                    readOnly
+                />
+            </div>
+
+            {/* End Now Button at the Bottom */}
+            <div className="w-full flex justify-center absolute bottom-8">
+                <button
+                    onClick={handleEndNowClick}
+                    className="px-6 py-2 bg-[#F45E5E] hover:bg-[#F87575] text-white font-bold rounded-md"
+                >
+                    End Now!
+                </button>
+            </div>
 
             {/* Pop-Up Modal */}
             {showPopup && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white rounded-lg p-6 w-64 text-center relative flex flex-col items-center">
-                        {/* Icon peringatan - bisa pakai emoji atau SVG */}
+                        {/* Warning Icon */}
                         <div className="mb-4">
                             <span className="text-red-500 text-4xl">⚠️</span>
                         </div>
@@ -78,4 +128,4 @@ export default function RentPage () {
             )}
         </div>
     );
-};
+}
