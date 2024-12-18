@@ -1,0 +1,64 @@
+// prisma/schema.prisma
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Tabel Users
+model User {
+  id           Int       @id @default(autoincrement())
+  email        String    @unique 
+  password     String    
+  full_name    String    
+  phone_number String    @unique 
+  created_at   DateTime  @default(now())
+  rentals      Rental[]  // Relationship to Rental table
+}
+
+enum VehicleStatus {
+  AVAILABLE
+  IN_USE
+  MAINTENANCE
+  UNAVAILABLE
+}
+
+// Tabel Vehicle
+model Vehicle {
+  vehicle_id       Int      @id @default(autoincrement())
+  vehicle_name     String   
+  vehicle_type     String   
+  latitude         Float    
+  longitude        Float
+  status           VehicleStatus   @default(AVAILABLE)
+  battery_level    Float
+  last_maintenance DateTime
+  rentals          Rental[] // Relationship to Rental table
+}
+
+enum RentalStatus {
+  ACTIVE
+  COMPLETED
+  CANCELED
+}
+
+model Rental {
+  rental_id     Int           @id @default(autoincrement())
+  user_id            Int
+  vehicle_id    Int
+  start_time    DateTime
+  end_time      DateTime
+  total_cost    Decimal       @default(0.0)
+  status        RentalStatus  @default(ACTIVE)
+
+  // Foreign Keys
+  user          User         @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  vehicle       Vehicle      @relation(fields: [vehicle_id], references: [vehicle_id], onDelete: Cascade)
+
+  @@index([user_id])        
+  @@index([vehicle_id])
+}
