@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+import DeviceRedirect from "../components/DeviceRedirect"; // Adjust the path as necessary
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
@@ -26,6 +27,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${plusJakartaSans.variable} antialiased`}>
+        <DeviceRedirect /> {/* Ensures redirection logic is applied */}
         {children}
       </body>
     </html>
