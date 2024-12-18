@@ -31,8 +31,8 @@ export default function TutorialPage() {
         throw new Error("Failed to update vehicle status");
       }
 
-      // Redirect to /rent after success
-      router.push("/rent");
+      // Redirect to /camera after success
+      router.push(`/camera`);
     } catch (error) {
       console.error("Error renting vehicle:", error);
     } finally {
