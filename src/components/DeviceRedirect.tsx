@@ -21,8 +21,6 @@ export default function DeviceRedirect() {
     // Redirect based on device type
     if (deviceType === "desktop" && !window.location.pathname.startsWith("/desktop")) {
       router.push("/desktop");
-    } else if (deviceType === "mobile") {
-      router.push("/");
     }
     // Add a condition for tablet if required
   }, [router]);
