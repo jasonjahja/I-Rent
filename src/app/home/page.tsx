@@ -4,7 +4,7 @@ import Image from "next/image";
 import Navbar from "@/components/NavBar";
 import { useRouter } from "next/navigation";
 
-export default function HomePage() {
+export default function Home() {
   const router = useRouter();
 
   return (
@@ -81,8 +81,8 @@ export default function HomePage() {
             <Image
               src="/track1.svg"
               alt="Feature"
-              width={100}
-              height={100}
+              width={50}
+              height={50}
               className="rounded"
             />
             <div>
