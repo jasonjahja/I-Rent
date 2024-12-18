@@ -78,7 +78,7 @@ export default function EditProfilePage() {
   return (
     <div className="flex flex-col h-screen bg-gradient-to-b from-gray-100 to-white relative mb-32">
       {/* Header */}
-      <div className="relative flex items-center justify-center p-16">
+      <div className="relative flex items-center justify-center p-12">
         <BackButton />
         <h1 className="text-2xl font-extrabold text-gray-800 text-center flex-1">
           Edit Profile
