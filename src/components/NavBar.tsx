@@ -11,7 +11,7 @@ export default function Navbar() {
   const isActive = (page: string) => {
     switch (page) {
       case "home":
-        return pathname === "/";
+        return pathname === "/home";
       case "map":
         return pathname === "/maps";
       case "profile":
@@ -25,7 +25,7 @@ export default function Navbar() {
   const handleNavigation = (page: string) => {
     switch (page) {
       case "home":
-        router.push("/"); // Redirect to home page
+        router.push("/home"); // Redirect to home page
         break;
       case "map":
         router.push("/maps"); // Redirect to map page

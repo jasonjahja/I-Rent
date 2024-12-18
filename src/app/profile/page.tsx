@@ -9,7 +9,6 @@ export default function EditProfilePage() {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
-    phoneNumber: "",
     oldPassword: "",
     newPassword: "",
   });
@@ -18,6 +17,10 @@ export default function EditProfilePage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+
+  // Password visibility states
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
 
   // Fetch current session data
   useEffect(() => {
@@ -28,7 +31,6 @@ export default function EditProfilePage() {
           setFormData({
             fullName: session.user.full_name || "",
             email: session.user.email || "",
-            phoneNumber: session.user.phone_number || "",
             oldPassword: "",
             newPassword: "",
           });
@@ -131,43 +133,48 @@ export default function EditProfilePage() {
               />
             </div>
 
-            {/* Phone Number */}
-            <div>
-              <label className="block text-gray-700 font-medium mb-1">Phone Number</label>
-              <input
-                type="text"
-                name="phoneNumber"
-                value={formData.phoneNumber}
-                onChange={handleChange}
-                className="w-full p-3 border border-black rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
-                placeholder="Enter phone number"
-              />
-            </div>
-
             {/* Old Password */}
             <div>
               <label className="block text-gray-700 font-medium mb-1">Old Password</label>
-              <input
-                type="password"
-                name="oldPassword"
-                value={formData.oldPassword}
-                onChange={handleChange}
-                className="w-full p-3 border border-black rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
-                placeholder="Enter old password"
-              />
+              <div className="relative">
+                <input
+                  type={showOldPassword ? "text" : "password"}
+                  name="oldPassword"
+                  value={formData.oldPassword}
+                  onChange={handleChange}
+                  className="w-full p-3 border border-black rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  placeholder="Enter old password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowOldPassword((prev) => !prev)}
+                  className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+                >
+                  <i className={`fa ${showOldPassword ? "fa-eye-slash" : "fa-eye"}`} />
+                </button>
+              </div>
             </div>
 
             {/* New Password */}
             <div>
               <label className="block text-gray-700 font-medium mb-1">New Password</label>
-              <input
-                type="password"
-                name="newPassword"
-                value={formData.newPassword}
-                onChange={handleChange}
-                className="w-full p-3 border border-black rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
-                placeholder="Enter new password"
-              />
+              <div className="relative">
+                <input
+                  type={showNewPassword ? "text" : "password"}
+                  name="newPassword"
+                  value={formData.newPassword}
+                  onChange={handleChange}
+                  className="w-full p-3 border border-black rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  placeholder="Enter new password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowNewPassword((prev) => !prev)}
+                  className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+                >
+                  <i className={`fa ${showNewPassword ? "fa-eye-slash" : "fa-eye"}`} />
+                </button>
+              </div>
             </div>
           </div>
 

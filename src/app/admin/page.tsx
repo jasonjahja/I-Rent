@@ -7,7 +7,6 @@ interface User {
   id: number;
   full_name: string;
   email: string;
-  phone_number: string;
   created_at: string;
 }
 
@@ -110,14 +109,6 @@ export default function AdminPage() {
                 {session.user.full_name || "N/A"}
               </p>
             </div>
-            <div className="flex items-center">
-              <p className="text-gray-600 font-medium text-sm sm:text-base">
-                Phone:
-              </p>
-              <p className="ml-2 sm:ml-4 text-gray-800 text-sm sm:text-base">
-                {session.user.phone_number || "N/A"}
-              </p>
-            </div>
           </div>
         </div>
       ) : (
@@ -138,7 +129,6 @@ export default function AdminPage() {
                 <th className="border border-gray-300 px-2 sm:px-4 py-2">ID</th>
                 <th className="border border-gray-300 px-2 sm:px-4 py-2">Name</th>
                 <th className="border border-gray-300 px-2 sm:px-4 py-2">Email</th>
-                <th className="border border-gray-300 px-2 sm:px-4 py-2">Phone</th>
                 <th className="border border-gray-300 px-2 sm:px-4 py-2">
                   Created At
                 </th>
@@ -153,9 +143,6 @@ export default function AdminPage() {
                   </td>
                   <td className="border border-gray-300 px-2 sm:px-4 py-2">
                     {user.email}
-                  </td>
-                  <td className="border border-gray-300 px-2 sm:px-4 py-2">
-                    {user.phone_number}
                   </td>
                   <td className="border border-gray-300 px-2 sm:px-4 py-2">
                     {new Date(user.created_at).toLocaleDateString()}

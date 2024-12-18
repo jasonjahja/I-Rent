@@ -1,33 +1,37 @@
 "use client";
 import Image from "next/image";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 export default function Register() {
   const [formData, setFormData] = useState({
     full_name: "",
     email: "",
-    phone_number: "",
     password: "",
+    confirm_password: "",
   });
 
   const [errors, setErrors] = useState<{
     full_name?: string;
     email?: string;
-    phone_number?: string;
     password?: string;
+    confirm_password?: string;
     general?: string;
   }>({});
-
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // Toggle visibility for Password
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // Toggle visibility for Confirm Password
+  const [hydrated, setHydrated] = useState(false);
   const router = useRouter();
-  const [success, setSuccess] = useState<string | null>(null);
+
+  useEffect(() => {
+    setHydrated(true); // Prevent hydration mismatch
+  }, []);
 
   // Handle input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-
-    // Clear field-specific error on change
     setErrors({ ...errors, [name]: undefined });
   };
 
@@ -35,70 +39,64 @@ export default function Register() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
-    setSuccess(null);
+    setLoading(true);
+
+    // Client-side validation
+    if (formData.password !== formData.confirm_password) {
+      setErrors({ confirm_password: "Passwords do not match." });
+      setLoading(false);
+      return;
+    }
 
     try {
       const response = await fetch("/api/auth/register", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
       const result = await response.json();
 
       if (!response.ok) {
-        // Assign field-specific errors if returned from the backend
-        if (result.errors) {
-          setErrors(result.errors);
+        if (result.error.includes("email")) {
+          setErrors({ email: result.error });
         } else {
-          throw new Error(result.error || "Failed to register user.");
+          setErrors({ general: result.error });
         }
         return;
       }
 
-      setSuccess("User registered successfully!");
-      router.push("/");
-      setFormData({ full_name: "", email: "", phone_number: "", password: "" });
-    } catch (err) {
-      setErrors({ general: (err as Error).message });
+      router.push("/home");
+    } catch {
+      setErrors({ general: "Something went wrong. Please try again later." });
+    } finally {
+      setLoading(false);
     }
   };
 
+  if (!hydrated) return null;
+
   return (
-    <div className="flex bg-red-500 min-h-screen overflow-hidden justify-center">
-      <div className="shadow-lg w-full max-w-md">
+    <div className="flex bg-red-500 justify-center overflow-hidden">
+      <div className="shadow-lg w-full">
         {/* Header */}
-        <div className="text-white text-center py-12">
-          <div className="flex items-center justify-center">
-            <Image
-              src="/Irent.png"
-              alt="Logo"
-              width={180}
-              height={45}
-              className="items-center justify-center"
-            />
-          </div>
+        <div className="text-white text-center py-12 flex items-center justify-center">
+          <Image src="/Irent.png" alt="Logo" width={180} height={45} />
         </div>
 
         {/* Form */}
-        <div className="p-8 rounded-t-[38px] bg-white h-full">
-          <h2 className="text-3xl font-Poppins font-bold text-center mb-8 text-black">
-            Create New <br /> Account
+        <div className="p-8 rounded-t-[38px] bg-white">
+          <h2 className="text-3xl font-bold text-center mb-8 text-black">
+            Create New Account
           </h2>
 
+          {/* General Error */}
           {errors.general && (
             <p className="text-red-500 text-sm text-center mb-4">{errors.general}</p>
           )}
-          {success && (
-            <p className="text-green-500 text-sm text-center mb-4">{success}</p>
-          )}
 
-          <form
-            className="flex flex-col gap-6 font-poppins"
-            onSubmit={handleSubmit}
-          >
+          <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
+            {/* Full Name */}
             <div>
               <label className="block text-xl font-medium text-gray-700">
                 Full Name
@@ -109,7 +107,7 @@ export default function Register() {
                 value={formData.full_name}
                 onChange={handleChange}
                 placeholder="John Doe"
-                className="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500"
+                className="mt-1 block w-full px-3 py-2 border rounded-md focus:ring-red-500 focus:border-red-500"
                 required
               />
               {errors.full_name && (
@@ -117,6 +115,7 @@ export default function Register() {
               )}
             </div>
 
+            {/* Email */}
             <div>
               <label className="block text-xl font-medium text-gray-700">
                 Email
@@ -126,8 +125,8 @@ export default function Register() {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="@johndoe@example.com"
-                className="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500"
+                placeholder="johndoe@example.com"
+                className="mt-1 block w-full px-3 py-2 border rounded-md focus:ring-red-500 focus:border-red-500"
                 required
               />
               {errors.email && (
@@ -135,53 +134,86 @@ export default function Register() {
               )}
             </div>
 
-            <div>
-              <label className="block text-xl font-medium text-gray-700">
-                Phone Number
-              </label>
-              <input
-                type="tel"
-                name="phone_number"
-                value={formData.phone_number}
-                onChange={handleChange}
-                placeholder="+1234567890 (max 15 digits, no spaces)"
-                className="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500"
-                required
-              />
-              {errors.phone_number && (
-                <p className="text-red-500 text-xs mt-1">{errors.phone_number}</p>
-              )}
-            </div>
-
+            {/* Password */}
             <div>
               <label className="block text-xl font-medium text-gray-700">
                 Password
               </label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="************"
-                className="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500"
-                required
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="************"
+                  className="mt-1 block w-full px-3 py-2 border rounded-md focus:ring-red-500 focus:border-red-500"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+                  aria-label="Toggle Password Visibility"
+                >
+                  <i className={`fa ${showPassword ? "fa-eye-slash" : "fa-eye"}`} />
+                </button>
+              </div>
               {errors.password && (
                 <p className="text-red-500 text-xs mt-1">{errors.password}</p>
               )}
             </div>
 
+            {/* Confirm Password */}
+            <div>
+              <label className="block text-xl font-medium text-gray-700">
+                Confirm Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  name="confirm_password"
+                  value={formData.confirm_password}
+                  onChange={handleChange}
+                  placeholder="************"
+                  className="mt-1 block w-full px-3 py-2 border rounded-md focus:ring-red-500 focus:border-red-500"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+                  aria-label="Toggle Confirm Password Visibility"
+                >
+                  <i
+                    className={`fa ${
+                      showConfirmPassword ? "fa-eye-slash" : "fa-eye"
+                    }`}
+                  />
+                </button>
+              </div>
+              {errors.confirm_password && (
+                <p className="text-red-500 text-xs mt-1">{errors.confirm_password}</p>
+              )}
+            </div>
+
+            {/* Submit Button */}
             <button
               type="submit"
-              className="bg-red-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-red-600 transition duration-200 mt-4"
+              disabled={loading}
+              className={`bg-red-500 text-white font-semibold py-2 px-4 rounded-md transition duration-200 ${
+                loading ? "opacity-50 cursor-not-allowed" : "hover:bg-red-600"
+              }`}
             >
-              Sign Up
+              {loading ? "Signing Up..." : "Sign Up"}
             </button>
           </form>
 
           <p className="mt-4 text-center text-sm text-gray-600">
             Already have an account?{" "}
-            <a href="/login" className="text-red-500 font-semibold hover:underline">
+            <a
+              href="/login"
+              className="text-red-500 font-semibold hover:underline"
+            >
               Log in
             </a>
           </p>

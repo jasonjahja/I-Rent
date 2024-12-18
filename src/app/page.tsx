@@ -13,18 +13,18 @@ export default function Home() {
                     width={300}
                     height={300}
                     layout="intrinsic"
-                    className="opacity-75"
+                    className="opacity-15"
                 />
             </div>
 
             {/* Foreground Content */}
-            <div className="relative z-10 max-w-sm ml-10 w-full text-white flex flex-col gap-4">
-                <h1 className="text-6xl font-bold leading-snug">
+            <div className="relative z-10 top-10 max-w-sm px-5 w-full text-white flex flex-col gap-4">
+                <h1 className="text-6xl font-bold">
                     Find the nearest scooter to you in just a few taps.
                 </h1>
                 <div>
                     <Link href="/login">
-                        <button className="mt-4 w-fit px-10 py-4 bg-white text-[#F45E5E] font-bold rounded-lg text-2xl">
+                        <button className="mt-20 px-10 py-4 bg-white text-[#F45E5E] font-bold rounded-lg text-2xl">
                             Rent Now!
                         </button>
                     </Link>

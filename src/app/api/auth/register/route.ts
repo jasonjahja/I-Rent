@@ -3,20 +3,20 @@ import { addUser } from "../../../../lib/userData";
 
 export async function POST(request: Request) {
   try {
-    const { full_name, email, password, phone_number } = await request.json();
+    const { full_name, email, password } = await request.json();
 
-    console.log("Request payload:", { full_name, email, password, phone_number });
+    console.log("Request payload:", { full_name, email, password });
 
     // Validate input presence
-    if (!full_name || !email || !password || !phone_number) {
+    if (!full_name || !email || !password) {
       return NextResponse.json(
-        { error: "full_name, email, password, and phone_number are required." },
+        { error: "full_name, email, and password are required." },
         { status: 400 }
       );
     }
 
     // Call the addUser function to create a new user
-    const newUser = await addUser(full_name, email, password, phone_number);
+    const newUser = await addUser(full_name, email, password);
 
     // If successful, return the newly created user
     return NextResponse.json(
@@ -26,7 +26,6 @@ export async function POST(request: Request) {
           id: newUser.id,
           full_name: newUser.full_name,
           email: newUser.email,
-          phone_number: newUser.phone_number,
           created_at: newUser.created_at,
         },
       },

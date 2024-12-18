@@ -8,14 +8,12 @@ const prisma = new PrismaClient();
  * @param full_name - User's full name.
  * @param email - User's email.
  * @param password - Plain text password.
- * @param phone_number - User's phone number.
  * @returns The created user object.
  */
 export async function addUser(
   full_name: string,
   email: string,
-  password: string,
-  phone_number: string
+  password: string
 ) {
   try {
     // Validate email format
@@ -29,12 +27,6 @@ export async function addUser(
       throw new Error("Password must be at least 6 characters long.");
     }
 
-    // Validate phone number format
-    const phoneRegex = /^\+?[1-9]\d{1,14}$/;
-    if (!phoneRegex.test(phone_number)) {
-      throw new Error("Invalid phone number format.");
-    }
-
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -44,7 +36,6 @@ export async function addUser(
         full_name,
         email,
         password: hashedPassword,
-        phone_number,
       },
     });
 
@@ -58,9 +49,6 @@ export async function addUser(
 
       if (targetFields?.includes("email")) {
         throw new Error("This email is already registered. Please use a different email.");
-      }
-      if (targetFields?.includes("phone_number")) {
-        throw new Error("This phone number has already been used. Please choose another.");
       }
     }
 
@@ -113,7 +101,6 @@ export async function getUsers() {
         id: true,
         full_name: true,
         email: true,
-        phone_number: true,
         created_at: true,
       },
     });
