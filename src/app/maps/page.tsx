@@ -29,6 +29,8 @@ export default function MapsPage() {
     const fetchVehicle = async () => {
       try {
         const response = await fetch("/api/vehicle");
+        console.log("Response", response)
+        console.log("Response", response.body)
         if (!response.ok) throw new Error("Failed to fetch vehicles");
 
         const data = await response.json();
