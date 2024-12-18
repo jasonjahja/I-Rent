@@ -36,6 +36,7 @@ model Vehicle {
   longitude        Float
   status           VehicleStatus   @default(AVAILABLE)
   battery_level    Float
+  distance         Float
   last_maintenance DateTime
   rentals          Rental[] // Relationship to Rental table
 }

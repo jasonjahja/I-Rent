@@ -1,26 +1,41 @@
+"use client"
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import React from "react";
 
-interface ScooterCardProps {
+interface VehicleCardProps {
   name: string;
   distance: number;
   battery: number;
   range: number;
+  vehicleType: string;
+  vehicleId: number;
 }
 
-const ScooterCard: React.FC<ScooterCardProps> = ({
+const VehicleCard: React.FC<VehicleCardProps> = ({
   name,
   distance,
   battery,
   range,
+  vehicleType,
+  vehicleId
 }) => {
+  
+  const router = useRouter();
+
+  // Navigate to the specific vehicle page
+  const handleCardClick = () => {
+    router.push(`/vehicle/${vehicleId}`);
+  };
+  
   return (
-    <div className="flex items-center justify-between px-8 py-4 bg-white rounded-lg shadow-md mb-4">
+    <div className="flex items-center justify-between px-8 py-4 bg-white rounded-lg shadow-md mb-4"
+    onClick={handleCardClick}>
       <div className="flex items-center gap-4">
         {/* Icon */}
         <Image
-          src="/bike1.svg"
-          alt="Bike1"
+          src={vehicleType === "scooter" ? "/bike1.svg" : "/bike2.svg"}
+          alt={vehicleType === "scooter" ? "Scooter" : "Bike"}
           width={80}
           height={160}
           className="object-contain"
@@ -66,6 +81,11 @@ const ScooterCard: React.FC<ScooterCardProps> = ({
         </div>
       </div>
 
+      {/* Vehicle Type */}
+      {/* <p className="mt-2 text-sm font-medium text-gray-500 capitalize">
+        Type: {vehicleType}
+      </p> */}
+
       {/* Rent Button */}
       {/* <button className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 font-bold">
         Rent
@@ -74,4 +94,4 @@ const ScooterCard: React.FC<ScooterCardProps> = ({
   );
 };
 
-export default ScooterCard;
+export default VehicleCard;
