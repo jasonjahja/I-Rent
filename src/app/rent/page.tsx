@@ -1,11 +1,14 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function RentPage() {
     const [showPopup, setShowPopup] = useState(false);
     const [time, setTime] = useState(0); // Time in seconds
     const [isRunning, setIsRunning] = useState(true); // Control stopwatch
     const [startDate, setStartDate] = useState(null); // State untuk menyimpan tanggal mulai
+
+    const router = useRouter();
 
     useEffect(() => {
         // Set tanggal mulai saat komponen pertama kali mount
@@ -43,6 +46,7 @@ export default function RentPage() {
         setIsRunning(false);
         console.log("Rent ended. Total time:", time);
         setShowPopup(false);
+        router.push("/home");
     };
 
     // Format date menjadi hari dan tanggal, misalnya "Tuesday, Dec 17, 2024"
@@ -65,12 +69,12 @@ export default function RentPage() {
             </h1>
 
             {/* Timer */}
-            <div className="flex items-center justify-center gap-2 mb-6">
-                <div className="w-16 h-16 flex items-center justify-center rounded-md bg-gradient-to-b from-[#F45E5E] to-[#F87575] text-white text-3xl font-bold">
+            <div className="flex items-center justify-center gap-2 mb-12">
+                <div className="w-32 h-32 flex items-center justify-center rounded-md bg-gradient-to-b from-[#F45E5E] to-[#F87575] text-white text-6xl font-bold">
                     {minutes}
                 </div>
-                <span className="text-3xl font-bold text-[#333]">:</span>
-                <div className="w-16 h-16 flex items-center justify-center rounded-md bg-gradient-to-b from-[#F45E5E] to-[#F87575] text-white text-3xl font-bold">
+                <span className="text-6xl font-bold text-[#333]">:</span>
+                <div className="w-32 h-32 flex items-center justify-center rounded-md bg-gradient-to-b from-[#F45E5E] to-[#F87575] text-white text-6xl font-bold">
                     {seconds}
                 </div>
             </div>
@@ -82,7 +86,7 @@ export default function RentPage() {
                 </button>
                 <input
                     type="text"
-                    className="w-48 px-4 py-2 rounded-md border border-[#F45E5E] focus:outline-none focus:border-[#F87575]"
+                    className="w-56 px-4 py-2 rounded-md border border-[#F45E5E] focus:outline-none focus:border-[#F87575]"
                     value={formattedStartDate}
                     readOnly
                 />

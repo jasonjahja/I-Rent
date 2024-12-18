@@ -1,7 +1,6 @@
 "use client";
-
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import BackButton from "@/components/BackButtons";
 import Navbar from "@/components/NavBar";
 import Image from "next/image";
@@ -15,16 +14,16 @@ interface Vehicle {
 }
 
 export default function VehiclePage() {
-  const { id } = useParams(); // Fetch dynamic ID from the URL
+  const { id } = useParams();
+  const router = useRouter();
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch vehicle details by ID
   useEffect(() => {
     const fetchVehicle = async () => {
       try {
-        const response = await fetch(`/api/vehicle/${id}`); // API to get specific vehicle
+        const response = await fetch(`/api/vehicle/${id}`);
         if (!response.ok) throw new Error("Failed to fetch vehicle data.");
 
         const data = await response.json();
@@ -35,9 +34,15 @@ export default function VehiclePage() {
         setLoading(false);
       }
     };
-
     fetchVehicle();
   }, [id]);
+
+  const handleRent = () => {
+    if (vehicle) {
+      // Redirect to tutorial page with query for vehicle_type
+      router.push(`/tutorial?id=${vehicle.vehicle_id}&type=${vehicle.vehicle_type}`);
+    }
+  };
 
   if (loading) return <p className="text-center mt-8 text-gray-600">Loading...</p>;
   if (error) return <p className="text-center mt-8 text-red-500">{error}</p>;
@@ -57,7 +62,7 @@ export default function VehiclePage() {
         {/* Vehicle Image */}
         <div className="flex-1 flex justify-center">
           <Image
-            src={vehicle?.vehicle_type === "bike" ? "/bike.png" : "/scootera.png"}
+            src={vehicle?.vehicle_type === "bike" ? "/bike.webp" : "/scooter.webp"}
             alt={vehicle?.vehicle_name || "Vehicle"}
             width={250}
             height={250}
@@ -70,7 +75,7 @@ export default function VehiclePage() {
           <div className="relative h-[250px] w-[20px] bg-red-100 rounded-full overflow-hidden">
             <div
               className="absolute bottom-0 bg-red-500 w-full rounded-full"
-              style={{ height: `${vehicle?.battery_level || 0}%` }} // Dynamic battery level
+              style={{ height: `${vehicle?.battery_level || 0}%` }}
             ></div>
           </div>
           <p className="mt-2 text-gray-800 font-semibold text-[24px] font-poppins">
@@ -94,12 +99,14 @@ export default function VehiclePage() {
         </div>
 
         {/* Rent Button */}
-        <button className="bg-red-500 text-white font-semibold font-poppins text-[24px] w-[200px] h-[74px] rounded-[8px] hover:bg-red-600 transition">
+        <button
+          onClick={handleRent}
+          className="bg-red-500 text-white font-semibold font-poppins text-[24px] w-[200px] h-[74px] rounded-[8px] hover:bg-red-600 transition"
+        >
           Rent
         </button>
       </div>
 
-      {/* Bottom Navigation */}
       <Navbar />
     </div>
   );

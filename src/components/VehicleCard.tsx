@@ -34,7 +34,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
       <div className="flex items-center gap-4">
         {/* Icon */}
         <Image
-          src={vehicleType === "scooter" ? "/bike1.svg" : "/bike2.svg"}
+          src={vehicleType === "scooter" ? "/scooter.webp" : "/bike.webp"}
           alt={vehicleType === "scooter" ? "Scooter" : "Bike"}
           width={80}
           height={160}

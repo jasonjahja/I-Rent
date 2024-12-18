@@ -8,18 +8,17 @@ export default function Home() {
   const router = useRouter();
 
   return (
-    <div className="bg-gray-50 min-h-screen flex flex-col">
+    <div className="bg-gray-50 min-h-screen flex flex-col p-2">
       {/* Header */}
-      <div className="px-6 py-4">
+      <div className="p-6">
         <h1 className="text-3xl font-bold text-red-500">I–Rent</h1>
-        <p className="text-xl font-semibold mt-4">Hi, Username!</p>
       </div>
 
       {/* Image and Overlay Text */}
       <div className="relative px-4 ">
         <div className="relative rounded-[10px] overflow-hidden shadow-md before:absolute before:inset-0 before:bg-gradient-to-t before:from-black/70 before:to-transparent before:rounded-[10px]">
           <Image
-            src="/scooter-home.png"
+            src="/scooter-home.webp"
             alt="Scooter"
             width={370}
             height={225}
