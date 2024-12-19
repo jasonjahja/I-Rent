@@ -93,7 +93,7 @@ export default function RentPage() {
             </div>
 
             {/* End Now Button at the Bottom */}
-            <div className="w-full flex justify-center absolute bottom-8">
+            <div className="w-full flex justify-center absolute bottom-24">
                 <button
                     onClick={handleEndNowClick}
                     className="px-6 py-2 bg-[#F45E5E] hover:bg-[#F87575] text-white font-bold rounded-md"
