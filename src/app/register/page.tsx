@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -63,6 +64,18 @@ export default function Register() {
         } else {
           setErrors({ general: result.error });
         }
+        return;
+      }
+
+      // Automatically sign in the user after registration
+      const signInResult = await signIn("credentials", {
+        redirect: false,
+        email: formData.email,
+        password: formData.password,
+      });
+
+      if (signInResult?.error) {
+        setErrors({ general: signInResult.error });
         return;
       }
 

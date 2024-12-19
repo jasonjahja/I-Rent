@@ -180,14 +180,14 @@ export default function EditProfilePage() {
           {/* Buttons */}
           <div className="flex flex-row mt-20 px-6 gap-6">            
             <button
-              onClick={() => signOut()}
-              className="w-full p-3 bg-[#282847] text-white font-semibold rounded-md hover:bg-red-600 transition"
+              onClick={() => signOut({ callbackUrl: "/login" })}
+              className="w-full p-3 bg-[#282847] text-white font-semibold rounded-md"
             >
               Log Out
             </button>
             <button
               onClick={handleSave}
-              className="w-full p-3 bg-[#F45E5E] text-white font-semibold rounded-md hover:bg-green-700 transition"
+              className="w-full p-3 bg-[#F45E5E] text-white font-semibold rounded-md"
               disabled={saving}
             >
               {saving ? "Saving..." : "Save Changes"}
