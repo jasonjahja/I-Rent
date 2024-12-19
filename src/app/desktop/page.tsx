@@ -1,30 +1,42 @@
-import Image from 'next/image';
-
-export default function DesktopPage() {
+export default function Home() {
   return (
-    <div className="relative w-screen h-screen">
-      {/* Full-Page Background Image */}
-      <Image
-        src="/biker.png" // Background image
-        alt="Person Riding Scooter"
-        layout="fill"
-        objectFit="cover"
-        quality={100}
-        priority
-      />
-<div className="absolute bottom-16 left-36 md:left-64 lg:left-56 flex flex-col items-center">
-  <button className="w-[200px] md:w-[240px] px-6 py-3 bg-[#F45E5E] text-white rounded-full text-lg font-bold shadow-lg hover:bg-[#e14b4b] transition-all">
-    Mobile Version &rarr;
-  </button>
-</div>
+    <div className="bg-[#FFECEC] h-screen flex flex-col">
+      {/* Header */}
+      <header className="flex justify-between items-center px-12 py-5">
+        {/* Logo */}
+        <div className="flex items-center space-x-2 text-black font-bold text-xl">
+          <img src="/logo.png" alt="Logo" className="h-20" />
+        </div>
+        {/* Google Play Button */}
+      </header>
 
-      {/* Overlay Heading (Header di Atas) */}
-      <div className="absolute top-8 left-0 w-full text-center text-red-500">
-      <h1 className="text-4xl md:text-6xl font-bold text-[#F45E5E] drop-shadow-lg">
-  Unlock Your Ride, Unleash the Fun!
-</h1>
 
-      </div>
+      {/* Main Content */}
+      <main className="flex-grow grid grid-cols-3 items-center text-center">
+        {/* Kiri: Teks */}
+        <div className="hidden md:block text-black text-[55px] font-bold -translate-y-10 translate-x-10">
+          <p>Unlock Your Ride, Unleash the Fun.</p>
+        </div>
+
+      {/* Main Content */}
+      <div className="flex flex-col justify-center items-center flex-grow">
+        {/* HP dengan isi gambar */}
+        <img
+          src="/bike.png"
+          alt="Phone Mockup with Content"
+          className="w-80 h-[480px] object-contain -translate-y-3"
+        />
+        {/* Tombol di bawah gambar dan posisinya di tengah */}
+        <button className="bg-red-500 text-white px-16 py-3 rounded-[50px] font-bold hover:bg-red-600 transition duration-300">
+          Mobile Version 
+        </button>
+    </div>
+
+        {/* Kanan: Teks */}
+        <div className="hidden md:block text-black text-[30px] font-semibold -translate-y-10 -translate-x-10">
+          <p>"Hope on a scooter and explore the beauty of your destination like never before."</p>
+        </div>
+      </main>
     </div>
   );
 }
