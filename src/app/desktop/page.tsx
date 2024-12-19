@@ -28,10 +28,10 @@ export default function Home() {
       {/* Main Content */}
       <main className="items-center text-center -translate-y-10">
         {/* Left: Text */}
-        <div className="hidden md:block text-black text-5xl font-bold leading-normal mb-8">
+        <div className="hidden md:block text-[#F45E5E] text-5xl font-bold leading-normal mb-8">
           <p>Unlock Your Ride, Unleash the Fun.</p>
         </div>
-        <p className="hidden md:block text-black text-2xl font-semibold leading-normal">
+        <p className="hidden md:block text-gray-500 text-2xl font-semibold leading-normal">
           "Hop on our vehicles and explore the beauty of your destination like
           never before."
         </p>
@@ -42,7 +42,7 @@ export default function Home() {
             src="/mobile-view.png"
             alt="Phone Mockup with Content"
             layout="intrinsic"
-            width={880}
+            width={980}
             height={480}
             className="object-contain translate-y-20"
           />

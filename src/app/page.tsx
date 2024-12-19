@@ -20,7 +20,7 @@ export default function Home() {
             {/* Foreground Content */}
             <div className="relative z-10 top-10 max-w-sm px-5 w-full text-white flex flex-col gap-4">
                 <h1 className="text-6xl font-bold">
-                    Find the nearest scooter to you in just a few taps.
+                    Find the nearest vehicle to you in just a few taps.
                 </h1>
                 <div>
                     <Link href="/login">
